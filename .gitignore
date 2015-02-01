@@ -6,7 +6,8 @@ public/components
 #Cloud9
 .c9/
 
-
+# All temporary txt files
+*.txt
 
 # Logs
 logs
