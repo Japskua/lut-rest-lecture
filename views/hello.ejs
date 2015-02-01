@@ -1,0 +1,15 @@
+<% include header %>
+
+  <h1><%-title %></h1>
+  
+  <div id="post-test">
+  <h2>Create new user</h2> 
+      <form action="/hello/" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="name" name="userName">
+            <input type="email" name="userEmail">
+            <input type="submit" value="Save">
+        </form>
+  </div>
+
+
+<% include footer %>
