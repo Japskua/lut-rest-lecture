@@ -1,14 +1,52 @@
 <% include header %>
 
-  <h1><%-title %></h1>
+  <div class="jumbotron">
+    <h1><%=title %></h1>
+    <p>This is a simple create/update/remove page for users @LUT REST tutorial</p>
+  </div>
   
-  <div id="post-test">
-  <h2>Create new user</h2> 
-      <form action="/hello/" method="post" enctype="application/x-www-form-urlencoded">
-            <input type="name" name="userName">
-            <input type="email" name="userEmail">
-            <input type="submit" value="Save">
-        </form>
+  <div id="create-part" class="panel panel-success">
+    <div class="panel-heading">
+      <h2>Create User</h2>
+    </div>
+    <div class="panel-body"
+      <form class="form-inline" action="/hello/" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-group">
+          <label for="exampleInputName2">Name</label>
+          <input type="text" class="form-control" id="userNameInput" name="userName" placeholder="Jane Doe">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputEmail2">Email</label>
+          <input type="email" class="form-control" id="userEmailInput" name="userEmail" placeholder="jane.doe@example.com">
+        </div>
+        <button type="submit" value="Save" class="btn btn-default">Create</button>
+    </form>
+    </div>
+  </div>
+  
+  
+  <div id="update-part" class="panel panel-info">
+    <div class="panel-heading">
+      <h2>Update User</h2>
+    </div>
+    
+    <div class="panel-body">
+      
+    </div>
+    
+  </div>
+
+
+  <div id="remove-part" class="panel panel-danger">
+    <div class="panel-heading">
+      <h2>Remove User</h2>
+    </div>
+    
+    <div class="panel-body">
+      
+    </div>
+    
+    
   </div>
 
 
