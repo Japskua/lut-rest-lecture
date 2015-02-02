@@ -13,7 +13,7 @@
       <form class="form-inline" action="/hello/" method="post" enctype="application/x-www-form-urlencoded">
         <div class="form-group">
           <label for="exampleInputName2">Name</label>
-          <input type="text" class="form-control" id="userNameInput" name="userName" placeholder="Jane Doe">
+          <input type="text" class="form-control" id="userNameInput" name="userName" placeholder="username">
         </div>
         <div class="form-group">
           <label for="exampleInputEmail2">Email</label>
@@ -31,7 +31,22 @@
     </div>
     
     <div class="panel-body">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">@</span>
+        <input type="text" class="form-control" placeholder="username" id="update-username">
+      </div>
       
+      </br>
+      
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="email@example.com" id="update-email" aria-describedby="basic-addon2">
+        <span class="input-group-addon" id="basic-addon2">@example.com</span>
+      </div>
+      
+      </br>
+      
+      <input class="btn btn-default" type="button" id="update-button" value="Update">
+        
     </div>
     
   </div>
@@ -42,12 +57,180 @@
       <h2>Remove User</h2>
     </div>
     
+        <div class="panel-body">
+      <div class="input-group">
+        <span class="input-group-addon" id="basic-addon1">@</span>
+        <input type="text" class="form-control" placeholder="username" id="remove-username">
+      </div>
+      
+      </br>
+      
+      <input class="btn btn-default" type="button" id="remove-button" value="Remove">
+    
     <div class="panel-body">
       
     </div>
     
     
   </div>
+
+<script>
+  $(document).ready(function() {
+
+    // Button functions
+    $('#update-button').on('click', update);
+    $('#remove-button').on('click', remove);
+
+});
+
+/**
+ * Reads the update information from the page
+ * 
+ * */
+function readUpdateInfo() {
+      // Get all the data
+    var username = $('#update-username').val();
+    var email = $('#update-email').val();
+
+    // Create the JSON
+    var userJson = {
+      userName : username,
+      userEmail : email
+    };
+    
+    // Stringify it, returning at the same time
+    //return JSON.stringify(userJson);
+    return userJson;
+}
+
+/**
+ * Update callback function
+ * 
+ * */
+function updateCallback(data) {
+  console.log("Received server response:", data);
+  if(data.message==="ok") {
+    alert("Update succesfull!");
+  }
+  else {
+    alert(data.error);
+  }
+}
+
+/**
+ * This is "kinda" hack to enable PUT with AJAX easily
+ * */
+$.put = function(url, data, callback, type){
+ 
+  if ( $.isFunction(data) ){
+    type = type || callback,
+    callback = data,
+    data = {}
+  }
+ 
+  return $.ajax({
+    url: url,
+    type: 'PUT',
+    success: callback,
+    data: data,
+    contentType: type
+  });
+}
+
+/**
+ * Delete "hack" to get DELETE working with AJAX
+ * 
+ * */
+$.delete = function(url, data, callback, type){
+ 
+  if ( $.isFunction(data) ){
+    type = type || callback,
+        callback = data,
+        data = {}
+  }
+ 
+  return $.ajax({
+    url: url,
+    type: 'DELETE',
+    success: callback,
+    data: data,
+    contentType: type
+  });
+}
+
+/** 
+ * Sends the given message to server, with the given callback function
+ * 
+ * */
+function sendToServer(json, callback, method) {
+  if (method === 'PUT') {
+     $.put("https://lut-rest-lecture-japskua.c9.io/hello/", json, callback); 
+  }
+  else if (method === 'DELETE') {
+      $.delete("https://lut-rest-lecture-japskua.c9.io/hello/", json, callback); 
+  } else {
+    alert('No proper method selected!');
+  }
+  
+}
+
+
+/**
+ * Update function to be called when pressing the update button
+ * 
+ * */
+function update() {
+  // Get the update info
+  var json = readUpdateInfo();
+  
+  // Send the message to the server
+  sendToServer(json, updateCallback, 'PUT');
+}
+
+/** 
+ * The callback function for delete
+ * 
+ * */
+function deleteCallback(data) {
+  console.log("Delete results:", data);
+  if(data.message === 'ok') {
+    alert("User removed");
+  }
+  else {
+    alert(data.error);
+  }
+}
+
+/**
+ * Remove function to be called when pressing the remove button
+ * 
+ * */
+function remove() {
+  var json = readRemoveInfo();
+  
+  // Send the message to server
+  sendToServer(json, deleteCallback, 'DELETE');
+}
+
+/**
+ * Reads the remove information from the page
+ * 
+ * */
+function readRemoveInfo() {
+      // Get all the data
+    var username = $('#remove-username').val();
+    //var email = $('#remove-email').val();
+
+    // Create the JSON
+    var userJson = {
+      userName : username,
+      userEmail : "empty"
+    };
+    
+    // Stringify it, returning at the same time
+    return userJson;
+}
+</script>
 
 
 <% include footer %>

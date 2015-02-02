@@ -134,23 +134,30 @@ router.put('/', function(req, res) {
     var filePath = result.userName.toString() + ".txt";
     
     // Write the results to a file
-    writeToFile(filePath, result);
+    writeToFile(filePath, result, res);
 
 });
 
 // DELETE /hello/
 router.delete('/', function(req, res) {
-    // Read the user information
-    var result = readUserInfo(req);
-
-    if(result.error) {
-        // We have an error
-        res.status(500).send({error : result.error});
+    // Check that the body is not empty
+    if (!req.body) {
+        // Return error message
+        res.status(500).send({error : "no body found"});
         return;
     }
     
-    // Create the filepath for writing [and make sure it is string]
-    var filePath = result.userName.toString() + ".txt";
+    // Check that userName is given
+    if (!req.body.userName) {
+        // Return error
+        res.status(500).send({error : "userName was missing!"});
+        return;
+    }
+    
+    var userName = req.body.userName;
+    
+    // Create the filepath for deleting [and make sure it is string]
+    var filePath = userName.toString() + ".txt";
     
     // Remove the data completely
     fs.unlink(filePath, function(err, result) {
